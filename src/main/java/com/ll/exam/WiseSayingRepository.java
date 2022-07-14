@@ -1,61 +1,31 @@
 package com.ll.exam;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class WiseSayingRepository {
-    private List<WiseSaying> wiseSayings;
-    private int wiseSayingsLastId;
+    private WiseSayingTable wiseSayingTable;
 
-    WiseSayingRepository() {
-        wiseSayingsLastId = 0;
-        wiseSayings = new ArrayList<>();
+    public WiseSayingRepository() {
+        wiseSayingTable = new WiseSayingTable(App.getBaseDir());
     }
 
-    public WiseSaying findById(int id) {
-        for (WiseSaying wiseSaying : wiseSayings) {
-            if (wiseSaying.id == id) {
-                return wiseSaying;
-            }
-        }
-
-        return null;
-    }
-
-    public WiseSaying write(String content, String author) {
-        int id = ++wiseSayingsLastId;
-        WiseSaying wiseSaying = new WiseSaying(id, content, author);
-        wiseSayings.add(wiseSaying);
-
-        return wiseSaying;
+    public WiseSaying add(String content, String author) {
+        return wiseSayingTable.save(content, author);
     }
 
     public List<WiseSaying> findAll() {
-        return wiseSayings;
+        return wiseSayingTable.findAll();
     }
 
-    public boolean remove(int id) {
-        WiseSaying wiseSaying = findById(id);
-
-        if (wiseSaying == null) {
-            return false;
-        }
-
-        wiseSayings.remove(wiseSaying);
-
-        return true;
+    public WiseSaying findById(int id) {
+        return wiseSayingTable.findById(id);
     }
 
     public boolean modify(int id, String content, String author) {
-        WiseSaying wiseSaying = findById(id);
+        return wiseSayingTable.save(id, content, author);
+    }
 
-        if (wiseSaying == null) {
-            return false;
-        }
-
-        wiseSaying.content = content;
-        wiseSaying.author = author;
-
-        return true;
+    public boolean remove(int id) {
+        return wiseSayingTable.removeById(id);
     }
 }

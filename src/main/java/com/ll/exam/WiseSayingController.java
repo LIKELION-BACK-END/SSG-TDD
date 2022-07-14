@@ -79,8 +79,12 @@ public class WiseSayingController {
             return;
         }
 
-        wiseSayingService.remove(wiseSaying.id);
+        wiseSayingService.remove(id);
 
         System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
+    }
+
+    public void build(Rq rq) {
+        wiseSayingService.dumpToJson();
     }
 }

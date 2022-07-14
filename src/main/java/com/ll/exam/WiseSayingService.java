@@ -1,8 +1,10 @@
 package com.ll.exam;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WiseSayingService {
+
     private WiseSayingRepository wiseSayingRepository;
 
     public WiseSayingService() {
@@ -10,7 +12,15 @@ public class WiseSayingService {
     }
 
     public WiseSaying write(String content, String author) {
-        return wiseSayingRepository.write(content, author);
+        return wiseSayingRepository.add(content, author);
+    }
+
+    public List<WiseSaying> findAll() {
+        return wiseSayingRepository.findAll();
+    }
+
+    public WiseSaying findById(int id) {
+        return wiseSayingRepository.findById(id);
     }
 
     public boolean modify(int id, String content, String author) {
@@ -21,11 +31,14 @@ public class WiseSayingService {
         return wiseSayingRepository.remove(id);
     }
 
-    public WiseSaying findById(int id) {
-        return wiseSayingRepository.findById(id);
-    }
+    public void dumpToJson() {
+        List<WiseSaying> wiseSayings = wiseSayingRepository.findAll();
 
-    public List<WiseSaying> findAll() {
-        return wiseSayingRepository.findAll();
+        String json = "[" + wiseSayings
+                .stream()
+                .map(wiseSaying -> wiseSaying.toJson())
+                .collect(Collectors.joining(",")) + "]";
+
+        Util.file.saveToFile("%s/data.json".formatted(App.getBaseDir()), json);
     }
 }
